@@ -4,7 +4,7 @@ ARG KMOD_VERSION=
 ARG KERNEL_VERSION=
 ARG REPOSITORY_TYPE=release
 
-FROM quay.io/fedora/fedora:${FEDORA_RELEASE} AS builder
+FROM quay.io/fedora/fedora-base-atomic AS builder
 
 ARG FEDORA_RELEASE
 ARG KMOD_NAME
