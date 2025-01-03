@@ -4,7 +4,7 @@ ARG KMOD_VERSION=
 ARG KERNEL_VERSION=
 ARG REPOSITORY_TYPE=release
 
-FROM quay.io/fedora-ostree-desktops/base:${FEDORA_RELEASE} AS builder
+FROM quay.io/fedora-ostree-desktops/silverblue:${FEDORA_RELEASE} AS builder
 
 ARG FEDORA_RELEASE
 ARG KMOD_NAME
