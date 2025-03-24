@@ -6,6 +6,9 @@ ARG REPOSITORY_TYPE=release
 
 FROM quay.io/fedora-ostree-desktops/silverblue:${FEDORA_RELEASE} AS builder
 
+RUN useradd -ms /bin/bash akmodsbuild
+USER akmodsbuild
+
 ARG FEDORA_RELEASE
 ARG KMOD_NAME
 ARG KMOD_VERSION
