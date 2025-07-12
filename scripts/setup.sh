@@ -18,13 +18,13 @@ mkdir -p /var/lib/alternatives
 #curl -LsSf -o /etc/yum.repos.d/fedora-coreos-pool.repo \
 #    https://raw.githubusercontent.com/coreos/fedora-coreos-config/stable/fedora-coreos-pool.repo
 
-rpm-ostree install \
-  kernel-devel \
-  kernel-devel-matched
+dnf5 -y install \
+    kernel-devel \
+    kernel-devel-matched
 
-rpm-ostree install \
-  akmods \
-  mock
+dnf5 -y install \
+    akmods \
+    mock
 
 if [[ ! -s "/tmp/certs/private_key.priv" ]]; then
     echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
