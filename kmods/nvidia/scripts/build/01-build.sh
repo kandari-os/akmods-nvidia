@@ -5,21 +5,12 @@ set -oeux pipefail
 RELEASE="$(rpm -E '%fedora.%_arch')"
 
 # Build NVIDIA drivers
-dnf5 install -y \
-    akmod-nvidia \
-    xorg-x11-drv-nvidia \
-    xorg-x11-drv-nvidia-cuda \
-    xorg-x11-drv-nvidia-devel \
-    xorg-x11-drv-nvidia-kmodsrc \
-    xorg-x11-drv-nvidia-power \
-    kernel-devel \
- && dnf5 clean all
+dnf install -y \
+    akmod-nvidia*.fc${RELEASE}
 
 
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
-NVIDIA_LIB_VERSION="$(basename "$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
-NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
 
 akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
 
@@ -40,7 +31,18 @@ rpmbuild -ba \
     ${ADDONS_DIR}/../nvidia-addons.spec
 
 mkdir -p /var/cache/rpms
-cp ${ADDONS_DIR}/rpmbuild/RPMS/noarch/*.rpm /var/cache/rpms
+
+for rpm in $(find /var/cache/akmods/ -type f -name \*.rpm); do
+    cp "${rpm}" /var/cache/rpms/;
+done
+
+for rpm in $(find ${ADDONS_DIR}/rpmbuild/RPMS/"$(uname -m)"/ -type f -name \*.rpm); do
+    cp "${rpm}" /var/cache/rpms/;
+done
+
+for rpm in $(find ${ADDONS_DIR}/rpmbuild/RPMS/noarch/ -type f -name \*.rpm); do
+    cp "${rpm}" /var/cache/rpms/;
+done
 
 
 # Create a file with the variables needed for the next steps
@@ -49,8 +51,6 @@ KERNEL_VERSION=${KERNEL_VERSION}
 RELEASE=${RELEASE}
 NVIDIA_PACKAGE_NAME=nvidia
 NVIDIA_MAJOR_VERSION=${KMOD_VERSION}
-NVIDIA_FULL_VERSION=${NVIDIA_FULL_VERSION}
 NVIDIA_AKMOD_VERSION=${NVIDIA_AKMOD_VERSION}
-NVIDIA_LIB_VERSION=${NVIDIA_LIB_VERSION}
 REPOSITORY_TYPE=${REPOSITORY_TYPE}
 EOF
