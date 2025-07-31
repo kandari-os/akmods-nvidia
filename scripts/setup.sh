@@ -18,11 +18,11 @@ mkdir -p /var/lib/alternatives
 #curl -LsSf -o /etc/yum.repos.d/fedora-coreos-pool.repo \
 #    https://raw.githubusercontent.com/coreos/fedora-coreos-config/stable/fedora-coreos-pool.repo
 
-dnf5 -y install \
+dnf -y install \
     kernel-devel \
     kernel-devel-matched
 
-dnf5 -y install \
+dnf -y install \
     akmods \
     mock
 

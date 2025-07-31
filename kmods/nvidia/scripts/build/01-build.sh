@@ -4,27 +4,22 @@ set -oeux pipefail
 
 RELEASE="$(rpm -E '%fedora.%_arch')"
 
-# Build NVIDIA drivers
-rpm-ostree install -y \
-    akmod-nvidia \
-    xorg-x11-drv-nvidia \
-    xorg-x11-drv-nvidia-cuda \
-    xorg-x11-drv-nvidia-devel \
-    xorg-x11-drv-nvidia-kmodsrc \
-    xorg-x11-drv-nvidia-power \
-    kernel-devel \
- && dnf5 clean all
-
-
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 NVIDIA_LIB_VERSION="$(basename "$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
+ADDONS_DIR="/tmp/rpm-specs/nvidia-addons"
+
+
+# Build NVIDIA drivers
+dnf install -y \
+    akmod-nvidia \
+    xorg-x11-drv-nvidia-cuda \
+ && dnf clean all
 
 akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
 
 # Build nvidia-addons
-ADDONS_DIR="/tmp/rpm-specs/nvidia-addons"
 mkdir -p ${ADDONS_DIR}/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS,tmp}
 curl -Lo ${ADDONS_DIR}/rpmbuild/SOURCES/nvidia-container-toolkit.repo https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
 curl -Lo ${ADDONS_DIR}/rpmbuild/SOURCES/nvidia-container.pp https://raw.githubusercontent.com/NVIDIA/dgx-selinux/master/bin/RHEL9/nvidia-container.pp
