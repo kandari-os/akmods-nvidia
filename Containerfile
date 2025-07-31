@@ -22,7 +22,7 @@ RUN chmod +x /tmp/scripts/*.sh && \
     /tmp/scripts/setup.sh && \
     /tmp/scripts/00-prebuild.sh && \
     /tmp/scripts/01-build.sh && \
-    /tmp/scripts/build-kmod.sh && \
+    /tmp/scripts/02-build-kmod.sh && \
     /tmp/scripts/final.sh
 
 RUN rpm -ql /rpms/*.rpm
