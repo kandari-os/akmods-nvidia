@@ -16,7 +16,7 @@ COPY kmods/${KMOD_NAME}/scripts/build /tmp/scripts
 COPY kmods/${KMOD_NAME}/rpm-specs /tmp/rpm-specs
 COPY kmods/${KMOD_NAME}/files /tmp/files
 
-COPY kmods/nvidia/scripts/build/build-kmod.sh /tmp/scripts/
+COPY kmods/nvidia/scripts/build/02-build-kmod.sh /tmp/scripts/
 
 RUN chmod +x /tmp/scripts/*.sh && \
     /tmp/scripts/setup.sh && \
