@@ -14,7 +14,12 @@ ADDONS_DIR="/tmp/rpm-specs/nvidia-addons"
 # Build NVIDIA drivers
 dnf install -y \
     akmod-nvidia \
+    xorg-x11-drv-nvidia \
     xorg-x11-drv-nvidia-cuda \
+    xorg-x11-drv-nvidia-devel \
+    xorg-x11-drv-nvidia-kmodsrc \
+    xorg-x11-drv-nvidia-power \
+    kernel-devel \
  && dnf clean all
 
 akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
