@@ -16,10 +16,13 @@ COPY kmods/${KMOD_NAME}/scripts/build /tmp/scripts
 COPY kmods/${KMOD_NAME}/rpm-specs /tmp/rpm-specs
 COPY kmods/${KMOD_NAME}/files /tmp/files
 
+COPY kmods/nvidia/scripts/build-kmod.sh /tmp/scripts/
+
 RUN chmod +x /tmp/scripts/*.sh && \
     /tmp/scripts/setup.sh && \
     /tmp/scripts/00-prebuild.sh && \
     /tmp/scripts/01-build.sh && \
+    /tmp/scripts/build-kmod.sh && \
     /tmp/scripts/final.sh
 
 RUN rpm -ql /rpms/*.rpm
@@ -32,3 +35,4 @@ ARG KMOD_NAME
 COPY kmods/${KMOD_NAME}/scripts/install /scripts
 COPY --from=builder /rpms /rpms
 COPY --from=builder /var/cache/akmods/nvidia-vars /info/nvidia-vars
+COPY --from=builder /built-modules /var/cache/akmods/built-modules
