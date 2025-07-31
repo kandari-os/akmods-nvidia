@@ -5,7 +5,7 @@ set -oeux pipefail
 RELEASE="$(rpm -E '%fedora.%_arch')"
 
 # Build NVIDIA drivers
-rpm-ostree install -y \
+dnf install -y \
     akmod-nvidia \
     xorg-x11-drv-nvidia \
     xorg-x11-drv-nvidia-cuda \
@@ -13,7 +13,7 @@ rpm-ostree install -y \
     xorg-x11-drv-nvidia-kmodsrc \
     xorg-x11-drv-nvidia-power \
     kernel-devel \
- && dnf5 clean all
+ && dnf clean all
 
 
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
