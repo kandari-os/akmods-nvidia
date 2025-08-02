@@ -75,15 +75,3 @@ jobs:
           build-args: |
             KMOD_NAME=${{ matrix.kmod-name }}
             FEDORA_RELEASE=${{ matrix.fedora-release }}
-
-  check:
-    needs: [build]
-    if: ${{ !cancelled() }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Exit on failure
-        if: ${{ needs.build.result == 'failure' }}
-        run: exit 1
-
-      - name: Exit on success
-        run: exit 0
