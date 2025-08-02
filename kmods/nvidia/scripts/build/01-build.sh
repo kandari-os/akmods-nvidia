@@ -9,13 +9,14 @@ rpm-ostree install \
     akmod-nvidia-470xx*:*.*.fc${RELEASE} \
     xorg-x11-drv-nvidia-470xx-{,cuda,devel,kmodsrc,power}*:*.*.fc${RELEASE}
 
-
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 NVIDIA_LIB_VERSION="$(basename "$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
 
-akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
+RUN useradd -r -s /bin/bash akmodsbuild
+RUN chown -R akmodsbuild:akmodsbuild /usr/src/akmods /var/cache/akmods
+RUN su - akmodsbuild -c " "akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia""
 
 # Build nvidia-addons
 ADDONS_DIR="/tmp/rpm-specs/nvidia-addons"

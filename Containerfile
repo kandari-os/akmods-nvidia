@@ -16,14 +16,12 @@ COPY kmods/${KMOD_NAME}/scripts/build /tmp/scripts
 COPY kmods/${KMOD_NAME}/rpm-specs /tmp/rpm-specs
 COPY kmods/${KMOD_NAME}/files /tmp/files
 
-RUN chmod +x /tmp/scripts/*.sh && \
-    /tmp/scripts/setup.sh && \
-    /tmp/scripts/00-prebuild.sh && \
-    /tmp/scripts/01-build.sh && \
-    /tmp/scripts/final.sh
-
+RUN chmod +x /tmp/scripts/*.sh
+RUN /tmp/scripts/setup.sh
+RUN /tmp/scripts/00-prebuild.sh
+RUN /tmp/scripts/01-build.sh
+RUN /tmp/scripts/final.sh
 RUN rpm -ql /rpms/*.rpm
-
 
 FROM scratch AS artifacts
 
