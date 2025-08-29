@@ -20,7 +20,7 @@ RUN chmod +x /tmp/scripts/*.sh
 RUN /tmp/scripts/setup.sh
 RUN /tmp/scripts/00-prebuild.sh
 RUN /tmp/scripts/01-build.sh
-RUN /tmp/scripts/final.sh
+RUN /tmp/scripts/export-rpms.sh
 RUN rpm -ql /rpms/*.rpm
 
 FROM scratch AS artifacts
