@@ -3,6 +3,8 @@
 set -ouex pipefail
 source /tmp/akmods/info/nvidia-vars
 
+REPOSITORY_TYPE=${1:-"testing"}
+
 # Create a backup of current repos
 cp -a /etc/yum.repos.d /tmp/yum.repos.d
 
@@ -13,3 +15,4 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/rpmfusion-{free,nonfree}-updat
 if [[ "${REPOSITORY_TYPE}" == "testing" ]]; then
   sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/rpmfusion-{free,nonfree}-updates-testing.repo
 fi
+
