@@ -3,8 +3,6 @@
 set -ouex pipefail
 source /tmp/akmods/info/nvidia-vars
 
-REPOSITORY_TYPE=${1:-"testing"}
-
 # Create a backup of current repos
 cp -a /etc/yum.repos.d /tmp/yum.repos.d
 
