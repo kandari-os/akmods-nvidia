@@ -14,10 +14,7 @@ NVIDIA_AKMOD_VERSION="$(rpm -q akmod-nvidia --queryformat '%{VERSION}-%{RELEASE}
 NVIDIA_LIB_VERSION="$(rpm -q xorg-x11-drv-nvidia --queryformat '%{VERSION}-%{RELEASE}')"
 NVIDIA_FULL_VERSION="$(rpm -q xorg-x11-drv-nvidia --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
 
-# Build akmods
-useradd -r -s /bin/bash akmodsbuild || true
-chown -R akmodsbuild:akmodsbuild /usr/src/akmods /var/cache/akmods
-akmodsbuild -c "akmods --force --kernels ${KERNEL_VERSION} --kmod nvidia"
+akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
 
 # Build NVIDIA addons
 ADDONS_DIR="/tmp/rpm-specs/nvidia-addons"
