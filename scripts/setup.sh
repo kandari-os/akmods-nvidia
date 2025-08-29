@@ -10,13 +10,11 @@ sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/fedora-updates-archive.repo
 
 mkdir -p /var/lib/alternatives
 
-rpm-ostree install \
+dnf install -y \
   kernel-devel \
-  kernel-devel-matched
-
-rpm-ostree install \
   akmods \
-  mock
+  mock \
+  --releasever=$RELEASE
 
 if [[ ! -s "/tmp/certs/private_key.priv" ]]; then
     echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."

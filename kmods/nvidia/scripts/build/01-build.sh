@@ -1,30 +1,34 @@
-#!/bin/sh
-
+#!/usr/bin/env bash
 set -oeux pipefail
 
 RELEASE="$(rpm -E '%fedora.%_arch')"
 
-# Build NVIDIA drivers
-rpm-ostree install \
-    akmod-nvidia-470xx*:*.*.fc${RELEASE} \
-    xorg-x11-drv-nvidia-470xx-{,cuda,devel,kmodsrc,power}*:*.*.fc${RELEASE}
+# Install NVIDIA driver packages
+dnf install -y \
+    akmod-nvidia-470xx* \
+    xorg-x11-drv-nvidia-470xx-{cuda,devel,kmodsrc,power}
 
+# Gather versions
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
-NVIDIA_LIB_VERSION="$(basename "$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
-NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
+NVIDIA_AKMOD_VERSION="$(rpm -q akmod-nvidia-470xx --queryformat '%{VERSION}-%{RELEASE}')"
+NVIDIA_LIB_VERSION="$(rpm -q xorg-x11-drv-nvidia-470xx --queryformat '%{VERSION}-%{RELEASE}')"
+NVIDIA_FULL_VERSION="$(rpm -q xorg-x11-drv-nvidia-470xx --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
 
-RUN useradd -r -s /bin/bash akmodsbuild
-RUN chown -R akmodsbuild:akmodsbuild /usr/src/akmods /var/cache/akmods
-RUN su - akmodsbuild -c " "akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia""
+# Build akmods
+useradd -r -s /bin/bash akmodsbuild || true
+chown -R akmodsbuild:akmodsbuild /usr/src/akmods /var/cache/akmods
+su - akmodsbuild -c "akmods --force --kernels ${KERNEL_VERSION} --kmod nvidia"
 
-# Build nvidia-addons
+# Build NVIDIA addons
 ADDONS_DIR="/tmp/rpm-specs/nvidia-addons"
 mkdir -p ${ADDONS_DIR}/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS,tmp}
-curl -Lo ${ADDONS_DIR}/rpmbuild/SOURCES/nvidia-container-toolkit.repo https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
-curl -Lo ${ADDONS_DIR}/rpmbuild/SOURCES/nvidia-container.pp https://raw.githubusercontent.com/NVIDIA/dgx-selinux/master/bin/RHEL9/nvidia-container.pp
-mv /tmp/files/* ${ADDONS_DIR}/rpmbuild/SOURCES/
 
+curl -Lo ${ADDONS_DIR}/rpmbuild/SOURCES/nvidia-container-toolkit.repo \
+    https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
+curl -Lo ${ADDONS_DIR}/rpmbuild/SOURCES/nvidia-container.pp \
+    https://raw.githubusercontent.com/NVIDIA/dgx-selinux/master/bin/RHEL9/nvidia-container.pp
+
+mv /tmp/files/* ${ADDONS_DIR}/rpmbuild/SOURCES/ || true
 sed -i "s@gpgcheck=0@gpgcheck=1@" ${ADDONS_DIR}/rpmbuild/SOURCES/nvidia-container-toolkit.repo
 
 install -D /etc/pki/akmods/certs/public_key.der ${ADDONS_DIR}/rpmbuild/SOURCES/public_key.der
@@ -35,17 +39,14 @@ rpmbuild -ba \
     ${ADDONS_DIR}/../nvidia-addons.spec
 
 mkdir -p /var/cache/rpms
-cp ${ADDONS_DIR}/rpmbuild/RPMS/noarch/*.rpm /var/cache/rpms
+cp ${ADDONS_DIR}/rpmbuild/RPMS/noarch/*.rpm /var/cache/rpms || true
 
-
-# Create a file with the variables needed for the next steps
+# Save build vars for downstream
 cat <<EOF > /var/cache/akmods/nvidia-vars
 KERNEL_VERSION=${KERNEL_VERSION}
 RELEASE=${RELEASE}
 NVIDIA_PACKAGE_NAME=nvidia
-NVIDIA_MAJOR_VERSION=${KMOD_VERSION}
 NVIDIA_FULL_VERSION=${NVIDIA_FULL_VERSION}
 NVIDIA_AKMOD_VERSION=${NVIDIA_AKMOD_VERSION}
 NVIDIA_LIB_VERSION=${NVIDIA_LIB_VERSION}
-REPOSITORY_TYPE=${REPOSITORY_TYPE}
 EOF
