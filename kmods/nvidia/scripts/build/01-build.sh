@@ -6,7 +6,8 @@ RELEASE="$(rpm -E '%fedora.%_arch')"
 # Install NVIDIA driver packages
 dnf install -y \
     akmod-nvidia-470xx \
-    xorg-x11-drv-nvidia-470xx-{cuda,devel,kmodsrc,power}
+    xorg-x11-drv-nvidia-470xx-{cuda,devel,kmodsrc,power} \
+    --allowerasing
 
 # Gather versions
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"

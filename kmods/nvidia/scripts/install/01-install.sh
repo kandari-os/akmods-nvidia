@@ -12,4 +12,5 @@ sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
 rpm-ostree install \
     xorg-x11-drv-nvidia-470xx-{,cuda-,devel-,kmodsrc-,power-}${NVIDIA_FULL_VERSION} \
     nvidia-container-toolkit \
-    /tmp/akmods/rpms/kmod-nvidia-470xx-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc${RELEASE}.rpm
+    /tmp/akmods/rpms/kmod-nvidia-470xx-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc${RELEASE}.rpm \
+    --allowerasing
