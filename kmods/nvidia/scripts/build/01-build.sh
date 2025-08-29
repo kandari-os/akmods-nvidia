@@ -5,14 +5,14 @@ RELEASE="$(rpm -E '%fedora.%_arch')"
 
 # Install NVIDIA driver packages
 dnf install -y \
-    akmod-nvidia-470xx* \
-    xorg-x11-drv-nvidia-470xx-{cuda,devel,kmodsrc,power}
+    akmod-nvidia \
+    xorg-x11-drv-nvidia-{cuda,devel,kmodsrc,power}
 
 # Gather versions
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-NVIDIA_AKMOD_VERSION="$(rpm -q akmod-nvidia-470xx --queryformat '%{VERSION}-%{RELEASE}')"
-NVIDIA_LIB_VERSION="$(rpm -q xorg-x11-drv-nvidia-470xx --queryformat '%{VERSION}-%{RELEASE}')"
-NVIDIA_FULL_VERSION="$(rpm -q xorg-x11-drv-nvidia-470xx --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
+NVIDIA_AKMOD_VERSION="$(rpm -q akmod-nvidia --queryformat '%{VERSION}-%{RELEASE}')"
+NVIDIA_LIB_VERSION="$(rpm -q xorg-x11-drv-nvidia --queryformat '%{VERSION}-%{RELEASE}')"
+NVIDIA_FULL_VERSION="$(rpm -q xorg-x11-drv-nvidia --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
 
 # Build akmods
 useradd -r -s /bin/bash akmodsbuild || true
