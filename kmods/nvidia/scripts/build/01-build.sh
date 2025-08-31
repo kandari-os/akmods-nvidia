@@ -11,7 +11,7 @@ rpm-ostree install \
 
 
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
+NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia-470xx" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 NVIDIA_LIB_VERSION="$(basename "$(rpm -q "xorg-x11-drv-nvidia-470xx" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia-470xx" --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
 
@@ -41,7 +41,7 @@ cp ${ADDONS_DIR}/rpmbuild/RPMS/noarch/*.rpm /var/cache/rpms
 cat <<EOF > /var/cache/akmods/nvidia-vars
 KERNEL_VERSION=${KERNEL_VERSION}
 RELEASE=${RELEASE}
-NVIDIA_PACKAGE_NAME=nvidia
+NVIDIA_PACKAGE_NAME=nvidia-470xx
 NVIDIA_MAJOR_VERSION=${KMOD_VERSION}
 NVIDIA_FULL_VERSION=${NVIDIA_FULL_VERSION}
 NVIDIA_AKMOD_VERSION=${NVIDIA_AKMOD_VERSION}
