@@ -15,7 +15,7 @@ NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSI
 NVIDIA_LIB_VERSION="$(basename "$(rpm -q "xorg-x11-drv-nvidia-470xx" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia-470xx" --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
 
-akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
+akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia-470xx"
 
 # Build nvidia-addons
 ADDONS_DIR="/tmp/rpm-specs/nvidia-addons"
