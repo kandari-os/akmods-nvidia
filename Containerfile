@@ -1,7 +1,7 @@
 ARG FEDORA_RELEASE="${FEDORA_RELEASE:-42}"
 ARG KMOD_NAME=nvidia
 ARG KMOD_VERSION=
-ARG REPOSITORY_TYPE=release
+ARG REPOSITORY_TYPE=testing
 
 FROM quay.io/fedora-ostree-desktops/silverblue:${FEDORA_RELEASE} AS builder
 
