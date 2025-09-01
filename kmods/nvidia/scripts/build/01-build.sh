@@ -5,7 +5,7 @@ set -oeux pipefail
 RELEASE="$(rpm -E '%fedora.%_arch')"
 
 # Build NVIDIA drivers
-rpm-ostree install \
+dnf install \
     akmod-nvidia-470xx*:*.*.fc${RELEASE} \
     xorg-x11-drv-nvidia-470xx-{,cuda,devel,kmodsrc,power}*:*.*.fc${RELEASE}
 
