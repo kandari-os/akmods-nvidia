@@ -6,16 +6,16 @@ RELEASE="$(rpm -E '%fedora.%_arch')"
 
 # Build NVIDIA drivers
 rpm-ostree install \
-    akmod-nvidia-470xx*:*.*.fc${RELEASE} \
-    xorg-x11-drv-nvidia-470xx-{,cuda,devel,kmodsrc,power}*:*.*.fc${RELEASE}
+    akmod-nvidia-*:*.*.fc${RELEASE} \
+    xorg-x11-drv-nvidia-{,cuda,devel,kmodsrc,power}*:*.*.fc${RELEASE}
 
 
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia-470xx" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
-NVIDIA_LIB_VERSION="$(basename "$(rpm -q "xorg-x11-drv-nvidia-470xx" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
-NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia-470xx" --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
+NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
+NVIDIA_LIB_VERSION="$(basename "$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
+NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}')"
 
-akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia-470xx"
+akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
 
 # Build nvidia-addons
 ADDONS_DIR="/tmp/rpm-specs/nvidia-addons"
@@ -41,7 +41,7 @@ cp ${ADDONS_DIR}/rpmbuild/RPMS/noarch/*.rpm /var/cache/rpms
 cat <<EOF > /var/cache/akmods/nvidia-vars
 KERNEL_VERSION=${KERNEL_VERSION}
 RELEASE=${RELEASE}
-NVIDIA_PACKAGE_NAME=nvidia-470xx
+NVIDIA_PACKAGE_NAME=nvidia
 NVIDIA_MAJOR_VERSION=${KMOD_VERSION}
 NVIDIA_FULL_VERSION=${NVIDIA_FULL_VERSION}
 NVIDIA_AKMOD_VERSION=${NVIDIA_AKMOD_VERSION}
