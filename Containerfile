@@ -1,4 +1,4 @@
-ARG FEDORA_RELEASE="${FEDORA_RELEASE:-42}"
+ARG FEDORA_RELEASE="${FEDORA_RELEASE:-43}"
 ARG KMOD_NAME=nvidia
 ARG KMOD_VERSION=
 ARG REPOSITORY_TYPE=release
@@ -23,7 +23,6 @@ RUN chmod +x /tmp/scripts/*.sh && \
     /tmp/scripts/final.sh
 
 RUN rpm -ql /rpms/*.rpm
-
 
 FROM scratch AS artifacts
 

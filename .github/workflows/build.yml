@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora-release: [42]  # Add Fedora releases here
+        fedora-release: [43]  # Add Fedora releases here
         kmod-name: [nvidia]
 
     env:
@@ -76,14 +76,3 @@ jobs:
             KMOD_NAME=${{ matrix.kmod-name }}
             FEDORA_RELEASE=${{ matrix.fedora-release }}
 
-  check:
-    needs: [build]
-    if: ${{ !cancelled() }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Exit on failure
-        if: ${{ needs.build.result == 'failure' }}
-        run: exit 1
-
-      - name: Exit on success
-        run: exit 0
