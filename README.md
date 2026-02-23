@@ -3,4 +3,4 @@
 [![Build AKMODS NVIDIA](https://github.com/kandari-os/akmods-nvidia/actions/workflows/build.yml/badge.svg)](https://github.com/kandari-os/akmods-nvidia/actions/workflows/build.yml)
 
 Akmods for [Kandari OS](https://github.com/tazihad/kandari)  
-Supported **F44**
+Supported **F43**
