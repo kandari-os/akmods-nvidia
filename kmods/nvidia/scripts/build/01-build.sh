@@ -6,7 +6,7 @@ RELEASE="$(rpm -E '%fedora.%_arch')"
 
 # Build NVIDIA drivers
 rpm-ostree install \
-    akmod-nvidia-*:*.*.fc${RELEASE} \
+    akmod-nvidia*:*.*.fc${RELEASE} \
     xorg-x11-drv-nvidia-{,cuda,devel,kmodsrc,power}*:*.*.fc${RELEASE}
 
 
