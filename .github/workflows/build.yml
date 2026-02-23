@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora-release: [42]  # Add Fedora releases here
+        fedora-release: [44]  # Add Fedora releases here
         kmod-name: [nvidia]
 
     env:
